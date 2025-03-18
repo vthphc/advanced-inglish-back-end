@@ -7,6 +7,7 @@ const dialogueRoutes = require("./dialogueRoutes");
 const reportRoutes = require("./reportRoutes");
 const walletRoutes = require("./walletRoutes");
 const testRoutes = require("./testRoutes");
+const transactionRoutes = require("./transactionRoutes");
 
 const router = express.Router();
 
@@ -19,6 +20,7 @@ router.use("/", {
     reportRoutes,
     walletRoutes,
     testRoutes,
+    transactionRoutes,
 });
 
 module.exports = router;
