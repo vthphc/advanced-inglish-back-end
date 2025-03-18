@@ -1,6 +1,6 @@
 const Report = require("../../models/report");
 
-const postReport = async ({ contentId, description, userId }) => {
+const postReport = async (contentId, description, userId) => {
     const newReport = new Report({
         contentId: contentId,
         description: description,

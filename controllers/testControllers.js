@@ -1,11 +1,11 @@
 const {
     getTests,
     getTestById,
-    createTest,
+    postTest,
     deleteTest,
 } = require("../services/rest/testServices");
 
-const getAllTests = async (req, res) => {
+const retrieveAllTests = async (req, res) => {
     try {
         const tests = await getTests();
         res.status(200).json(tests);
@@ -14,9 +14,10 @@ const getAllTests = async (req, res) => {
     }
 };
 
-const getTestById = async (req, res) => {
+const retrieveTestById = async (req, res) => {
+    const { id } = req.params;
     try {
-        const test = await getTestById(req.params);
+        const test = await getTestById(id);
         res.status(200).json(test);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -24,8 +25,9 @@ const getTestById = async (req, res) => {
 };
 
 const addNewTest = async (req, res) => {
+    const { topic, title, difficulty, questionsList } = req.body;
     try {
-        const newTest = await createTest(req.body);
+        const newTest = await postTest(topic, title, difficulty, questionsList);
         res.status(201).json(newTest);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -33,8 +35,9 @@ const addNewTest = async (req, res) => {
 };
 
 const removeTest = async (req, res) => {
+    const { id } = req.params;
     try {
-        await deleteTest(req.params);
+        await deleteTest(id);
         res.status(204).json();
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -42,8 +45,8 @@ const removeTest = async (req, res) => {
 };
 
 module.exports = {
-    getAllTests,
-    getTestById,
+    retrieveAllTests,
+    retrieveTestById,
     addNewTest,
     removeTest,
 };

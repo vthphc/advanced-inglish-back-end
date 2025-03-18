@@ -1,4 +1,6 @@
 const express = require("express");
+const router = express.Router();
+
 const initRoutes = require("./init");
 const questionRoutes = require("./questitonRoutes");
 const commentRoutes = require("./commentRoutes");
@@ -8,8 +10,7 @@ const reportRoutes = require("./reportRoutes");
 const walletRoutes = require("./walletRoutes");
 const testRoutes = require("./testRoutes");
 const transactionRoutes = require("./transactionRoutes");
-
-const router = express.Router();
+const lessonRoutes = require("./lessonRoutes");
 
 router.use("/", {
     initRoutes,
@@ -21,6 +22,7 @@ router.use("/", {
     walletRoutes,
     testRoutes,
     transactionRoutes,
+    lessonRoutes,
 });
 
 module.exports = router;

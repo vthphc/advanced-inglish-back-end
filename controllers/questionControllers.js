@@ -1,60 +1,106 @@
 const {
     getAllQuestions,
     getQuestionById,
-    createQuestion,
-    updateQuestion,
+    postQuestion,
+    putQuestion,
     deleteQuestion,
 } = require("../services/rest/questionServices");
 
-const getQuestions = async (req, res) => {
+const retrieveQuestions = async (req, res) => {
     try {
         const questions = await getAllQuestions();
         res.status(200).json(questions);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-}
+};
 
-const getQuestion = async (req, res) => {
+const retrieveQuestion = async (req, res) => {
+    const { id } = req.params;
     try {
-        const question = await getQuestionById(req.params);
+        const question = await getQuestionById(id);
         res.status(200).json(question);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-}
+};
 
 const addQuestion = async (req, res) => {
+    const {
+        type,
+        content,
+        audioURL,
+        imageURL,
+        difficulty,
+        question,
+        options,
+        correctAnswer,
+        explanation,
+    } = req.body;
     try {
-        const newQuestion = await createQuestion(req.body);
+        const newQuestion = await postQuestion(
+            type,
+            content,
+            audioURL,
+            imageURL,
+            difficulty,
+            question,
+            options,
+            correctAnswer,
+            explanation
+        );
         res.status(201).json(newQuestion);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-}
+};
 
-const changeQuestion = async (req, res) => {
+const editQuestion = async (req, res) => {
+    const {
+        questionId,
+        type,
+        content,
+        audioURL,
+        imageURL,
+        difficulty,
+        question,
+        options,
+        correctAnswer,
+        explanation,
+    } = req.body;
     try {
-        const updatedQuestion = await updateQuestion(req.body);
+        const updatedQuestion = await putQuestion({
+            questionId,
+            type,
+            content,
+            audioURL,
+            imageURL,
+            difficulty,
+            question,
+            options,
+            correctAnswer,
+            explanation,
+        });
         res.status(200).json(updatedQuestion);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-}
+};
 
 const removeQuestion = async (req, res) => {
+    const { id } = req.params;
     try {
-        await deleteQuestion(req.params);
+        await deleteQuestion(id);
         res.status(204).end();
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-}
+};
 
 module.exports = {
-    getQuestions,
-    getQuestion,
+    retrieveQuestions,
+    retrieveQuestion,
     addQuestion,
-    changeQuestion,
+    editQuestion,
     removeQuestion,
 };

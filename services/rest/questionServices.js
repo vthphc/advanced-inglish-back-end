@@ -5,12 +5,12 @@ const getAllQuestions = async () => {
     return questions;
 };
 
-const getQuestionById = async ({ questionId }) => {
+const getQuestionById = async (questionId) => {
     const question = await Questions.findById(questionId);
     return question;
 };
 
-const createQuestion = async ({
+const postQuestion = async (
     type,
     content,
     audioURL,
@@ -19,24 +19,24 @@ const createQuestion = async ({
     question,
     options,
     correctAnswer,
-    explanation,
-}) => {
+    explanation
+) => {
     const newQuestion = new Questions({
-        type,
-        content,
-        audioURL,
-        imageURL,
-        difficulty,
-        question,
-        options,
-        correctAnswer,
-        explanation,
+        type: type,
+        content: content,
+        audioURL: audioURL,
+        imageURL: imageURL,
+        difficulty: difficulty,
+        question: question,
+        options: options,
+        correctAnswer: correctAnswer,
+        explanation: explanation,
     });
     await newQuestion.save();
     return newQuestion;
 };
 
-const updateQuestion = async ({
+const putQuestion = async ({
     questionId,
     type,
     content,
@@ -66,7 +66,7 @@ const updateQuestion = async ({
     return updatedQuestion;
 };
 
-const deleteQuestion = async ({ questionId }) => {
+const deleteQuestion = async (questionId) => {
     const deletedQuestion = await Questions.findByIdAndDelete(questionId);
     return deletedQuestion;
 };
@@ -74,7 +74,7 @@ const deleteQuestion = async ({ questionId }) => {
 module.exports = {
     getAllQuestions,
     getQuestionById,
-    createQuestion,
-    updateQuestion,
+    postQuestion,
+    putQuestion,
     deleteQuestion,
 };

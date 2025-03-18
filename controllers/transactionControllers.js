@@ -1,11 +1,11 @@
 const {
     getAllTransactions,
-    createTransaction,
+    postTransaction,
     getTransactionById,
     deleteTransactionById,
 } = require("../services/rest/transactionServices");
 
-const getAllTransactions = async (req, res) => {
+const retrieveAllTransactions = async (req, res) => {
     try {
         const transactions = await getAllTransactions();
         res.status(200).json(transactions);
@@ -14,17 +14,17 @@ const getAllTransactions = async (req, res) => {
     }
 };
 
-const createTransaction = async (req, res) => {
+const addTransaction = async (req, res) => {
     try {
         const { amount, senderId } = req.body;
-        const transaction = await createTransaction({ amount, senderId });
+        const transaction = await postTransaction(amount, senderId);
         res.status(201).json(transaction);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
-const getTransactionById = async (req, res) => {
+const retrieveTransactionById = async (req, res) => {
     try {
         const { id } = req.params;
         const transaction = await getTransactionById(id);
@@ -34,7 +34,7 @@ const getTransactionById = async (req, res) => {
     }
 };
 
-const deleteTransactionById = async (req, res) => {
+const removeTransactionById = async (req, res) => {
     try {
         const { id } = req.params;
         const transaction = await deleteTransactionById(id);
@@ -45,8 +45,8 @@ const deleteTransactionById = async (req, res) => {
 };
 
 module.exports = {
-    getAllTransactions,
-    createTransaction,
-    getTransactionById,
-    deleteTransactionById,
+    retrieveAllTransactions,
+    addTransaction,
+    retrieveTransactionById,
+    removeTransactionById,
 };

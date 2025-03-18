@@ -15,13 +15,17 @@ const lessonSchema = new mongoose.Schema(
             {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "Comment",
+                default: [],
             },
         ],
         createdAt: {
             type: Date,
             default: Date.now,
         },
-        score: Number,
+        score: {
+            type: Number,
+            default: 0,
+        },
     },
     { versionKey: false }
 );

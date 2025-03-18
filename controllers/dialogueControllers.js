@@ -1,30 +1,32 @@
 const {
     getDialogues,
     getDialogueById,
-    createDialogue,
+    postDialogue,
     getDialogueByUserId,
     deleteDialogueById,
 } = require("../services/rest/dialogueServices");
 
 const addDialogue = async (req, res) => {
+    const { userId, topic, dialogue } = req.body;
     try {
-        const newDialogue = await createDialogue(req.body);
+        const newDialogue = await postDialogue(userId, topic, dialogue);
         res.status(201).json(newDialogue);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
-const getDialogue = async (req, res) => {
+const retrieveDialogue = async (req, res) => {
+    const { id } = req.params;
     try {
-        const dialogue = await getDialogueById(req.params.id);
+        const dialogue = await getDialogueById(id);
         res.status(200).json(dialogue);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
-const getAllDialogues = async (req, res) => {
+const retrieveAllDialogues = async (req, res) => {
     try {
         const dialogues = await getDialogues();
         res.status(200).json(dialogues);
@@ -33,9 +35,10 @@ const getAllDialogues = async (req, res) => {
     }
 };
 
-const getAllDialoguesByUser = async (req, res) => {
+const retrieveAllDialoguesByUser = async (req, res) => {
+    const { userId } = req.params;
     try {
-        const dialogues = await getDialogueByUserId(req.params.userId);
+        const dialogues = await getDialogueByUserId(userId);
         res.status(200).json(dialogues);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -43,8 +46,9 @@ const getAllDialoguesByUser = async (req, res) => {
 };
 
 const removeDialogue = async (req, res) => {
+    const { id } = req.params;
     try {
-        await deleteDialogueById(req.params.id);
+        await deleteDialogueById(id);
         res.status(204).end();
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -53,8 +57,8 @@ const removeDialogue = async (req, res) => {
 
 module.exports = {
     addDialogue,
-    getDialogue,
-    getAllDialogues,
-    getAllDialoguesByUser,
+    retrieveDialogue,
+    retrieveAllDialogues,
+    retrieveAllDialoguesByUser,
     removeDialogue,
 };

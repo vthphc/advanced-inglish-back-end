@@ -10,7 +10,9 @@ require("dotenv").config();
 const port = process.env.PORT || 5001;
 
 app.use(bodyParser.json());
-app.use('/api', require('./routes'))
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use("/api", require("./routes"));
 
 async function startServer() {
     try {
