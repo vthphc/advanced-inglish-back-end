@@ -6,6 +6,7 @@ const flashcardRoutes = require("./flashcardRoutes");
 const dialogueRoutes = require("./dialogueRoutes");
 const reportRoutes = require("./reportRoutes");
 const walletRoutes = require("./walletRoutes");
+const testRoutes = require("./testRoutes");
 
 const router = express.Router();
 
@@ -16,7 +17,8 @@ router.use("/", {
     flashcardRoutes,
     dialogueRoutes,
     reportRoutes,
-    walletRoutes
+    walletRoutes,
+    testRoutes,
 });
 
 module.exports = router;
