@@ -5,12 +5,12 @@ const getTests = async () => {
     return tests;
 };
 
-const getTestById = async ({ testId }) => {
+const getTestById = async (testId) => {
     const test = await Tests.findById(testId);
     return test;
 };
 
-const createTest = async ({ topic, title, difficulty, questionsList }) => {
+const postTest = async (topic, title, difficulty, questionsList) => {
     const test = new Tests({
         topic: topic,
         title: title,
@@ -21,13 +21,13 @@ const createTest = async ({ topic, title, difficulty, questionsList }) => {
     return test;
 };
 
-const deleteTest = async ({ testId }) => {
+const deleteTest = async (testId) => {
     await Tests.findByIdAndDelete(testId);
 };
 
 module.exports = {
     getTests,
     getTestById,
-    createTest,
+    postTest,
     deleteTest,
 };

@@ -10,7 +10,10 @@ const questionSchema = new mongoose.Schema(
         question: String, // question such as "What is the capital of France?"
         options: [String],
         correctAnswer: String,
-        explanation: String,
+        explanation: {
+            type: String,
+            default: "No explanation provided.",
+        },
     },
     { versionKey: false }
 );

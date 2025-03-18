@@ -5,7 +5,7 @@ const getAllTransactions = async () => {
     return transactions;
 };
 
-const createTransaction = async ({ amount, senderId }) => {
+const postTransaction = async (amount, senderId) => {
     const transaction = new Transactions({
         amount,
         sender: senderId,
@@ -26,7 +26,7 @@ const deleteTransactionById = async (id) => {
 
 module.exports = {
     getAllTransactions,
-    createTransaction,
+    postTransaction,
     getTransactionById,
     deleteTransactionById,
 };

@@ -1,6 +1,6 @@
 const Comments = require("../../models/comment");
 
-const postComment = async ({ userId, content }) => {
+const postComment = async (userId, content) => {
     const newComment = new Comments({
         userId: userId,
         content: content,
@@ -9,17 +9,17 @@ const postComment = async ({ userId, content }) => {
     return newComment;
 };
 
-const getCommentById = async ({ commentId }) => {
+const getCommentById = async (commentId) => {
     const comment = await Comments.findById(commentId);
     return comment;
 };
 
-const getAllCommentsByUserId = async ({ userId }) => {
+const getAllCommentsByUserId = async (userId) => {
     const comments = await Comments.find({ userId: userId });
     return comments;
 };
 
-const putComment = async ({ commentId, content }) => {
+const putComment = async (commentId, content) => {
     const updatedComment = await Comments.findByIdAndUpdate(
         commentId,
         {
@@ -30,7 +30,7 @@ const putComment = async ({ commentId, content }) => {
     return updatedComment;
 };
 
-const putCommentLike = async ({ commentId, userId }) => {
+const putCommentLike = async (commentId, userId) => {
     const updatedComment = await Comments.findByIdAndUpdate(
         commentId,
         {
@@ -41,7 +41,7 @@ const putCommentLike = async ({ commentId, userId }) => {
     return updatedComment;
 };
 
-const deleteComment = async ({ commentId }) => {
+const deleteComment = async (commentId) => {
     await Comments.findByIdAndDelete(commentId);
 };
 

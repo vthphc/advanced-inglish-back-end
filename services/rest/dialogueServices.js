@@ -8,8 +8,9 @@ const getDialogueById = async (id) => {
     return await Dialogues.findById(id);
 };
 
-const createDialogue = async ({ topic, dialogues }) => {
+const postDialogue = async (userId, topic, dialogues) => {
     return await Dialogues.create({
+        user: userId,
         topic: topic,
         dialogue: dialogues,
     });
@@ -26,7 +27,7 @@ const deleteDialogueById = async (id) => {
 module.exports = {
     getDialogues,
     getDialogueById,
-    createDialogue,
+    postDialogue,
     getDialogueByUserId,
     deleteDialogueById,
 };

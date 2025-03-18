@@ -1,65 +1,45 @@
 const Flashcards = require("../../models/flashcard");
 
-const postFlashcard = async ({
+const postFlashcard = async (
     userId,
     topic,
     word,
     definition,
     example,
     category,
-    phonetics,
-}) => {
-    try {
-        const flashcard = new Flashcards({
-            user: userId,
-            topic,
-            word,
-            definition,
-            example,
-            category,
-            phonetics,
-        });
-        await flashcard.save();
-        return flashcard;
-    } catch (error) {
-        throw new Error(error);
-    }
+    phonetics
+) => {
+    const flashcard = new Flashcards({
+        user: userId,
+        topic: topic,
+        word: word,
+        definition: definition,
+        example: example,
+        category: category,
+        phonetics: phonetics,
+    });
+    await flashcard.save();
+    return flashcard;
 };
 
 const getFlashcards = async () => {
-    try {
-        const flashcards = await Flashcards.find();
-        return flashcards;
-    } catch (error) {
-        throw new Error(error);
-    }
+    const flashcards = await Flashcards.find();
+    return flashcards;
 };
 
 const getFlashcardById = async (id) => {
-    try {
-        const flashcard = await Flashcards.findById(id);
-        return flashcard;
-    } catch (error) {
-        throw new Error(error);
-    }
+    const flashcard = await Flashcards.findById(id);
+    return flashcard;
 };
 
 const getAllFlashcardsByUserId = async (userId) => {
-    try {
-        const flashcards = await Flashcards.find({ user: userId });
-        return flashcards;
-    } catch (error) {
-        throw new Error(error);
-    }
+    const flashcards = await Flashcards.find({ user: userId });
+    return flashcards;
 };
 
 const deleteFlashcardById = async (id) => {
-    try {
-        const flashcard = await Flashcards.findByIdAndDelete(id);
-        return flashcard;
-    } catch (error) {
-        throw new Error(error);
-    }
+    const flashcard = await Flashcards.findByIdAndDelete(id);
+    return flashcard;
 };
 
 module.exports = {
