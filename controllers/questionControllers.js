@@ -4,7 +4,7 @@ const {
     createQuestion,
     updateQuestion,
     deleteQuestion,
-} = require("../services/rest/questions");
+} = require("../services/rest/questionServices");
 
 const getQuestions = async (req, res) => {
     try {

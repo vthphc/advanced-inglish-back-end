@@ -15,7 +15,10 @@ const dialogueSchema = new mongoose.Schema(
                 audioURL: String, // the link to the audio
             },
         ],
-        feedback: string, // using AI to generate feedback
+        feedback: {
+            type: String,
+            default: "", // using AI to generate feedback
+        },
         createdAt: {
             type: Date,
             default: Date.now,
