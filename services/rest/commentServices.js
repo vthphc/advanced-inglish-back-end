@@ -14,6 +14,11 @@ const getCommentById = async ({ commentId }) => {
     return comment;
 };
 
+const getAllCommentsByUserId = async ({ userId }) => {
+    const comments = await Comments.find({ userId: userId });
+    return comments;
+};
+
 const putComment = async ({ commentId, content }) => {
     const updatedComment = await Comments.findByIdAndUpdate(
         commentId,
@@ -43,6 +48,7 @@ const deleteComment = async ({ commentId }) => {
 module.exports = {
     postComment,
     getCommentById,
+    getAllCommentsByUserId,
     putComment,
     putCommentLike,
     deleteComment,

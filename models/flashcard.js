@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 
 const flashcardSchema = new mongoose.Schema(
     {
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+        },
         topic: String,
         word: String, // the word such as "apple"
         definition: String,
