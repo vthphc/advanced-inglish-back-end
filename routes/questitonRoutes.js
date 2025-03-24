@@ -3,10 +3,10 @@ const router = express.Router();
 
 const questionControllers = require("../controllers/questionControllers");
 
-router.get("/questions", questionControllers.getQuestions);
-router.get("/questions/:questionId", questionControllers.getQuestion);
-router.post("/questions", questionControllers.addQuestion);
-router.put("/questions", questionControllers.changeQuestion);
-router.delete("/questions/:questionId", questionControllers.removeQuestion);
+router.get("/", questionControllers.retrieveQuestions);
+router.get("/:questionId", questionControllers.retrieveQuestion);
+router.post("/", questionControllers.addQuestion);
+router.put("/", questionControllers.editQuestion);
+router.delete("/:questionId", questionControllers.removeQuestion);
 
 module.exports = router;

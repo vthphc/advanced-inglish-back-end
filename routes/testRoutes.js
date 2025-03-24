@@ -3,9 +3,9 @@ const router = express.Router();
 
 const testControllers = require("../controllers/testControllers");
 
-router.get("/tests", testControllers.getAllTests);
-router.get("/tests/:testId", testControllers.getTestById);
-router.post("/tests", testControllers.addNewTest);
-router.delete("/tests/:testId", testControllers.removeTest);
+router.get("/", testControllers.retrieveAllTests);
+router.get("/:testId", testControllers.retrieveTestById);
+router.post("/", testControllers.addNewTest);
+router.delete("/:testId", testControllers.removeTest);
 
 module.exports = router;

@@ -3,6 +3,6 @@ const router = express.Router();
 
 const initControllers = require("../controllers/initControllers");
 
-router.get("/init", initControllers.getInit);
+router.get("/", initControllers.getInit);
 
 module.exports = router;
