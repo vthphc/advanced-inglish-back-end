@@ -11,18 +11,20 @@ const walletRoutes = require("./walletRoutes");
 const testRoutes = require("./testRoutes");
 const transactionRoutes = require("./transactionRoutes");
 const lessonRoutes = require("./lessonRoutes");
+const authRoutes = require("./authRoutes");
+const completionRoutes = require("./completionRoutes");
 
-router.use("/", {
-    initRoutes,
-    questionRoutes,
-    commentRoutes,
-    flashcardRoutes,
-    dialogueRoutes,
-    reportRoutes,
-    walletRoutes,
-    testRoutes,
-    transactionRoutes,
-    lessonRoutes,
-});
+router.use("/init", initRoutes);
+router.use("/questions", questionRoutes);
+router.use("/comments", commentRoutes);
+router.use("/flashcards", flashcardRoutes);
+router.use("/dialogues", dialogueRoutes);
+router.use("/reports", reportRoutes);
+router.use("/wallets", walletRoutes);
+router.use("/tests", testRoutes);
+router.use("/transactions", transactionRoutes);
+router.use("/lessons", lessonRoutes);
+router.use("/auth", authRoutes);
+router.use("/completion", completionRoutes);
 
 module.exports = router;
