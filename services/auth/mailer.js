@@ -81,4 +81,18 @@ const sendTestEmail = async (email) => {
     }
 };
 
+const sendEmail = async (email, subject, text, html) => {
+    try {
+        let info = await transporter.sendMail({
+            to: email,
+            subject: subject,
+            text: text,
+            html: html,
+        });
+        console.log("Email sent: " + info.response);
+    } catch (err) {
+        console.log(err);
+    }
+};
+
 module.exports = { sendTestEmail };
