@@ -15,9 +15,11 @@ const userSchema = new mongoose.Schema(
             bio: String,
         },
         subscription: {
-            status: String,
-            enum: ["free", "premium"],
-            default: "free",
+            status: {
+                type: String,
+                enum: ["free", "premium"],
+                default: "free",
+            },
             expiresAt: Date,
         },
         learningPlan: {
