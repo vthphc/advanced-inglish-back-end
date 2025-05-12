@@ -7,7 +7,7 @@ const contextPrompt = (
     Example for topic "shopping":
     ["Shopping mall", "Supermarket", "Online shopping", "Black Friday", "Window shopping"]`;
 
-const phrasePrompt = (
+const dialoguePrompt = (
     topic,
     context
 ) => `You are two people having a conversation about the topic "${topic}".
@@ -50,7 +50,7 @@ const flashcardPrompt = (topic) => `
 
 module.exports = {
     contextPrompt,
-    phrasePrompt,
+    dialoguePrompt,
     explanationPrompt,
     flashcardPrompt,
 };

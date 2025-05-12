@@ -10,9 +10,10 @@ const dialogueSchema = new mongoose.Schema(
         topic: String,
         dialogue: [
             {
+                _id: false,
                 speaker: String, // the speaker such as "A"
                 line: String, // the line such as "Hello!"
-                audioURL: String, // the link to the audio
+                // audioURL: String, // the link to the audio
             },
         ],
         feedback: {
