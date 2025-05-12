@@ -95,4 +95,4 @@ const sendEmail = async (email, subject, text, html) => {
     }
 };
 
-module.exports = { sendTestEmail };
+module.exports = { sendTestEmail, sendEmail };
