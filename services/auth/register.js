@@ -57,8 +57,14 @@ const registerUser = async (req, res) => {
             testsTaken: [],
             reports: [],
         });
-
-        await newUser.save();
+        
+        try {
+            await newUser.save();
+            console.log("User saved successfully:", newUser);
+        } catch (saveError) {
+            console.error("Error saving user:", saveError);
+            return res.status(500).json({ message: "Failed to save user" });
+        }
 
         const verificationLink = `${process.env.FRONTEND_URL}/verify-email/${verificationToken}`;
         await sendEmail(

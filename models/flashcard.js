@@ -13,8 +13,9 @@ const flashcardSchema = new mongoose.Schema(
         category: String, // noun, verb, adjective, adverb, preposition, conjunction, interjection
         phonetics: [
             {
+                _id: false,
                 text: String, // the pronunciation of the word
-                audioURL: String, // the link to the audio file
+                audio: String, // the link to the audio file
             },
         ],
         createdAt: {

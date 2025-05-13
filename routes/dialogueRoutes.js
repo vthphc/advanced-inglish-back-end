@@ -8,5 +8,6 @@ router.get("/:id", dialogueControllers.retrieveDialogue);
 router.get("/", dialogueControllers.retrieveAllDialogues);
 router.get("/user/:userId", dialogueControllers.retrieveAllDialoguesByUser);
 router.delete("/:id", dialogueControllers.removeDialogue);
+router.post("/generate", dialogueControllers.generateDialogue);
 
 module.exports = router;

@@ -1,8 +1,6 @@
 const cleanResponse = (response) => {
-    return response
-        .replace(/[\r\n]+/g, " ")
-        .replace(/ +/g, " ")
-        .trim();
+    const match = response.match(/\{[\s\S]*\}/);
+    return match ? match[0] : response;
 };
 
 module.exports = {

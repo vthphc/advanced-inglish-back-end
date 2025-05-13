@@ -5,6 +5,8 @@ const {
     getDialogueByUserId,
     deleteDialogueById,
 } = require("../services/rest/dialogueServices");
+const { getResponse } = require("../services/completion/completion");
+const { dialoguePrompt } = require("../utils/prompts");
 
 const addDialogue = async (req, res) => {
     const { userId, topic, dialogue } = req.body;
@@ -55,10 +57,46 @@ const removeDialogue = async (req, res) => {
     }
 };
 
+const generateDialogue = async (req, res) => {
+    const { userId, topic, context } = req.body;
+    const prompt = dialoguePrompt(topic, context);
+
+    try {
+        const completions = await getResponse(prompt);
+
+        const rawText =
+            typeof completions === "string"
+                ? completions.trim()
+                : completions.toString().trim();
+
+        const dialogues = rawText
+            .split("\n") // one entry per line
+            .map((line) => line.trim()) // trim each
+            .filter((line) => line.startsWith("Person")) // drop any empty or non-dialogue lines
+            .map((line) => {
+                // split into ["Person A", "Hey there: more text"]
+                const [speakerPart, ...rest] = line.split(/:\s*/);
+
+                return {
+                    speaker: speakerPart.replace(/^Person\s+/, ""), // "A" or "B"
+                    line: rest.join(": ").trim(), // preserve extra colons
+                };
+            });
+
+        const newDialogue = await postDialogue(userId, topic, dialogues);
+
+        await newDialogue.save();
+        res.status(201).json(newDialogue);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 module.exports = {
     addDialogue,
     retrieveDialogue,
     retrieveAllDialogues,
     retrieveAllDialoguesByUser,
     removeDialogue,
+    generateDialogue,
 };

@@ -8,5 +8,6 @@ router.get("/:id", flashcardControllers.retrieveFlashcard);
 router.get("/", flashcardControllers.retrieveAllFlashcards);
 router.get("/user/:userId", flashcardControllers.retrieveAllFlashcardsByUser);
 router.delete("/:id", flashcardControllers.removeFlashcard);
+router.post("/generate", flashcardControllers.generateFlashcard);
 
 module.exports = router;
