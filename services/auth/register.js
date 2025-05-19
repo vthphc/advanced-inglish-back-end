@@ -34,6 +34,8 @@ const registerUser = async (req, res) => {
             email,
             password: hashedPassword,
             role: "User",
+            isVerified: false,
+            verificationToken,
             profile: {
                 name: name || "",
                 avatar: avatar || "",
@@ -57,7 +59,7 @@ const registerUser = async (req, res) => {
             testsTaken: [],
             reports: [],
         });
-        
+
         try {
             await newUser.save();
             console.log("User saved successfully:", newUser);
@@ -124,10 +126,8 @@ const registerUser = async (req, res) => {
             `
         );
 
-        const token = generateToken(newUser);
-
         res.status(201).json({
-            token,
+            user: newUser,
             message: "User registered successfully. Please verify your email.",
         });
     } catch (error) {
@@ -136,6 +136,33 @@ const registerUser = async (req, res) => {
     }
 };
 
+const updateUserVerification = async (req, res) => {
+    const { verificationToken } = req.params;
+
+    try {
+        const user = await User.findOne({
+            verificationToken: verificationToken,
+        });
+
+        if (!user) {
+            return res
+                .status(400)
+                .json({ message: "Invalid verification token" });
+        }
+
+        user.isVerified = true;
+        user.verificationToken = null;
+
+        await user.save();
+
+        res.json({ message: "Email verified successfully" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};
+
 module.exports = {
     registerUser,
+    updateUserVerification,
 };

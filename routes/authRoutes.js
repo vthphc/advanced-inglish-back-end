@@ -6,5 +6,6 @@ const registerService = require("../services/auth/register");
 
 router.post("/send-email", authControllers.sendEmail);
 router.post("/register", registerService.registerUser);
+router.put("/verify-email/:verificationToken", registerService.updateUserVerification);
 
 module.exports = router;

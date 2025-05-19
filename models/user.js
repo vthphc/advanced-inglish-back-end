@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema(
         password: String,
         role: String,
         isVerified: { type: Boolean, default: false },
+        verificationToken: String,
         createdAt: { type: Date, default: Date.now },
         updatedAt: { type: Date, default: Date.now },
         profile: {
