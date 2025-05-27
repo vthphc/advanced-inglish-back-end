@@ -9,10 +9,7 @@ const loginUser = async (email, password) => {
             throw new Error("Invalid credentials");
         }
 
-        const isPasswordValid = await bcrypt.compare(
-            password,
-            user.password
-        );
+        const isPasswordValid = await bcrypt.compare(password, user.password);
 
         console.log(isPasswordValid);
 
