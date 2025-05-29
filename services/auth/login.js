@@ -18,7 +18,7 @@ const loginUser = async (email, password) => {
         }
 
         if (!user.isVerified) {
-            console.log("user verification status: ", user.isVerified);
+            console.log("User verification status: ", user.isVerified);
             return {
                 isVerified: false,
                 userId: user._id,
