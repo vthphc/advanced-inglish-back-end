@@ -17,11 +17,26 @@ const loginUser = async (email, password) => {
             throw new Error("Invalid credentials");
         }
 
+        if (!user.isVerified) {
+            console.log("user verification status: ", user.isVerified);
+            return {
+                isVerified: false,
+                userId: user._id,
+                message:
+                    "Account not verified. Please check your email to verify your account.",
+            };
+        }
+
         const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
             expiresIn: "24h",
         });
 
-        return token;
+        return {
+            accessToken: token,
+            name: user.profile.name,
+            userId: user._id,
+            isVerified: user.isVerified,
+        };
     } catch (error) {
         throw new Error("Internal server error");
     }
