@@ -15,5 +15,6 @@ router.put(
 router.post("/login", authControllers.login);
 router.get("/me", authControllers.me);
 router.put("/change-password", authMiddleware, updateService.changePassword);
+router.put("/profile", authMiddleware, updateService.updateProfile);
 
 module.exports = router;

@@ -48,6 +48,52 @@ const changePassword = async (req, res) => {
 	}
 };
 
+const updateProfile = async (req, res) => {
+	const userId = req.user.userId;
+	const { name, avatar, dob, gender, bio } = req.body;
+
+	try {
+		const user = await User.findById(userId);
+		if (!user) {
+			return res
+				.status(404)
+				.json({ message: "User not found" });
+		}
+
+		// Update only the fields that are provided
+		if (name !== undefined) user.profile.name = name;
+		if (avatar !== undefined) user.profile.avatar = avatar;
+		if (dob !== undefined) user.profile.dob = dob;
+		if (gender !== undefined) user.profile.gender = gender;
+		if (bio !== undefined) user.profile.bio = bio;
+
+		user.updatedAt = new Date();
+		await user.save();
+
+		// Return updated user profile without sensitive information
+		const updatedProfile = {
+			name: user.profile.name,
+			avatar: user.profile.avatar,
+			dob: user.profile.dob,
+			gender: user.profile.gender,
+			bio: user.profile.bio,
+			email: user.email,
+			isVerified: user.isVerified,
+			subscription: user.subscription,
+			learningPlan: user.learningPlan,
+		};
+
+		res.json({
+			message: "Profile updated successfully",
+			profile: updatedProfile,
+		});
+	} catch (error) {
+		console.error("Error updating profile:", error);
+		res.status(500).json({ message: "Internal server error" });
+	}
+};
+
 module.exports = {
 	changePassword,
+	updateProfile,
 };
