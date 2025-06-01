@@ -8,72 +8,76 @@ const User = require("../../models/user");
 const { sendEmail } = require("./mailer");
 
 const generateToken = (user) => {
-    return jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-        expiresIn: "24h",
-    });
+	return jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+		expiresIn: "24h",
+	});
 };
 
 const generateVerificationToken = () => {
-    return crypto.randomBytes(32).toString("hex");
+	return crypto.randomBytes(32).toString("hex");
 };
 
 const registerUser = async (req, res) => {
-    const { email, password, name, avatar, dob, gender, bio } = req.body;
+	const { email, password, name, avatar, dob, gender, bio } = req.body;
 
-    try {
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
-            return res.status(400).json({ message: "User already exists" });
-        }
+	try {
+		const existingUser = await User.findOne({ email });
+		if (existingUser) {
+			return res
+				.status(400)
+				.json({ message: "User already exists" });
+		}
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+		const hashedPassword = await bcrypt.hash(password, 10);
 
-        const verificationToken = generateVerificationToken();
+		const verificationToken = generateVerificationToken();
 
-        const newUser = new User({
-            email,
-            password: hashedPassword,
-            role: "User",
-            isVerified: false,
-            verificationToken,
-            profile: {
-                name: name || "",
-                avatar: avatar || "",
-                dob: dob || null,
-                gender: gender || "",
-                bio: bio || "",
-            },
-            subscription: {
-                status: "free",
-                expiresAt: null,
-            },
-            learningPlan: {
-                currentLevel: "",
-                targetLevel: "",
-                curriculum: [],
-            },
-            suppportMaterials: {
-                dialogues: [],
-                flashcards: [],
-            },
-            testsTaken: [],
-            reports: [],
-        });
+		const newUser = new User({
+			email,
+			password: hashedPassword,
+			role: "User",
+			isVerified: false,
+			verificationToken,
+			profile: {
+				name: name || "",
+				avatar: avatar || "",
+				dob: dob || null,
+				gender: gender || "",
+				bio: bio || "",
+			},
+			subscription: {
+				status: "free",
+				expiresAt: null,
+			},
+			learningPlan: {
+				currentLevel: "",
+				targetLevel: "",
+				curriculum: [],
+			},
+			suppportMaterials: {
+				dialogues: [],
+				flashcards: [],
+			},
+			testsTaken: [],
+			reports: [],
+		});
 
-        try {
-            await newUser.save();
-            console.log("User saved successfully:", newUser);
-        } catch (saveError) {
-            console.error("Error saving user:", saveError);
-            return res.status(500).json({ message: "Failed to save user" });
-        }
+		try {
+			await newUser.save();
+			console.log("User saved successfully:", newUser);
+		} catch (saveError) {
+			console.error("Error saving user:", saveError);
+			return res
+				.status(500)
+				.json({ message: "Failed to save user" });
+		}
 
-        const verificationLink = `${process.env.FRONTEND_URL}/verify-email/${verificationToken}`;
-        await sendEmail(
-            email,
-            "Verification Email",
-            "Please verify your email address",
-            `
+		const verificationLink = `${process.env.FRONTEND_URL}/verify-email/${verificationToken}`;
+		await sendEmail(
+			email,
+			"Verification Email",
+			"Please verify your email address",
+			`
                 <!DOCTYPE html>
                 <html>
                 <head>
@@ -124,45 +128,47 @@ const registerUser = async (req, res) => {
                 </body>
                 </html>
             `
-        );
+		);
 
-        res.status(201).json({
-            user: newUser,
-            message: "User registered successfully. Please verify your email.",
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Internal server error" });
-    }
+		res.status(201).json({
+			user: newUser,
+			message: "User registered successfully. Please verify your email.",
+		});
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ message: "Internal server error" });
+	}
 };
 
 const updateUserVerification = async (req, res) => {
-    const { verificationToken } = req.params;
+	const { verificationToken } = req.params;
 
-    try {
-        const user = await User.findOne({
-            verificationToken: verificationToken,
-        });
+	try {
+		const user = await User.findOne({
+			verificationToken: verificationToken,
+		});
 
-        if (!user) {
-            return res
-                .status(400)
-                .json({ message: "Invalid verification token" });
-        }
+		if (!user) {
+			return res
+				.status(400)
+				.json({
+					message: "Invalid verification token",
+				});
+		}
 
-        user.isVerified = true;
-        user.verificationToken = null;
+		user.isVerified = true;
+		user.verificationToken = null;
 
-        await user.save();
+		await user.save();
 
-        res.json({ message: "Email verified successfully" });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Internal server error" });
-    }
+		res.json({ message: "Email verified successfully" });
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ message: "Internal server error" });
+	}
 };
 
 module.exports = {
-    registerUser,
-    updateUserVerification,
+	registerUser,
+	updateUserVerification,
 };
