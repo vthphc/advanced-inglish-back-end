@@ -15,9 +15,9 @@ const retrieveAllTests = async (req, res) => {
 };
 
 const retrieveTestById = async (req, res) => {
-    const { id } = req.params;
+    const { testId } = req.params;
     try {
-        const test = await getTestById(id);
+        const test = await getTestById(testId);
         res.status(200).json(test);
     } catch (error) {
         res.status(500).json({ error: error.message });

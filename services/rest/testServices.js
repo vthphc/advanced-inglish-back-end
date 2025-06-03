@@ -6,7 +6,17 @@ const getTests = async () => {
 };
 
 const getTestById = async (testId) => {
-    const test = await Tests.findById(testId);
+    if (!testId) {
+        throw new Error("Test ID is required");
+    }
+
+    const test = await Tests.findById(testId)
+        .populate("lessonList")
+        .populate("comments");
+
+    if (!test) {
+        throw new Error("Test not found");
+    }
     return test;
 };
 

@@ -3,6 +3,7 @@ const {
     getLessonById,
     postLesson,
     deleteLessonById,
+    getLessonsByIds,
 } = require("../services/rest/lessonServices");
 
 const retrieveAllLessons = async (req, res) => {
@@ -49,9 +50,26 @@ const removeLessonById = async (req, res) => {
     }
 };
 
+const retrieveLessonsByIds = async (req, res) => {
+    try {
+        const { ids } = req.query;
+        if (!ids) {
+            return res
+                .status(400)
+                .json({ message: "IDs parameter is required" });
+        }
+        const idArray = ids.split(",");
+        const lessons = await getLessonsByIds(idArray);
+        res.status(200).json(lessons);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 module.exports = {
     retrieveAllLessons,
     retrieveLessonById,
     addLesson,
     removeLessonById,
+    retrieveLessonsByIds,
 };

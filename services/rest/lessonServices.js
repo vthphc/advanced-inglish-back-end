@@ -1,7 +1,16 @@
 const Lessons = require("../../models/lesson");
 
 const getAllLessons = async () => {
-    const lessons = await Lessons.find();
+    const lessons = await Lessons.find()
+        .populate("questionsList")
+        .populate("comments");
+    return lessons;
+};
+
+const getLessonsByIds = async (ids) => {
+    const lessons = await Lessons.find({ _id: { $in: ids } })
+        .populate("questionsList")
+        .populate("comments");
     return lessons;
 };
 
@@ -28,6 +37,7 @@ const deleteLessonById = async (id) => {
 
 module.exports = {
     getAllLessons,
+    getLessonsByIds,
     getLessonById,
     postLesson,
     deleteLessonById,
