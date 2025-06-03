@@ -11,7 +11,12 @@ const getTestById = async (testId) => {
     }
 
     const test = await Tests.findById(testId)
-        .populate("lessonList")
+        .populate({
+            path: "lessonList",
+            populate: {
+                path: "questionsList",
+            },
+        })
         .populate("comments");
 
     if (!test) {
