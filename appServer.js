@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const logger = require("./utils/logger");
 const connectToDatabase = require("./config/dbConfig");
+const cors = require("cors");
 
 const app = express();
 
@@ -11,6 +12,18 @@ const port = process.env.PORT || 5001;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// set up CORS for all addresses
+app.use(
+    cors({
+        origin: "*",
+        methods: ["GET", "POST", "PUT", "DELETE"],
+        allowedHeaders: ["Content-Type", "Authorization"],
+        exposedHeaders: ["Content-Type", "Authorization"],
+        credentials: true,
+        maxAge: 3600,
+    })
+);
 
 app.use("/api", require("./routes"));
 

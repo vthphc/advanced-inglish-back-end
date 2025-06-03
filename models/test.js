@@ -5,10 +5,10 @@ const testSchema = new mongoose.Schema(
         topic: String,
         title: String,
         difficulty: String,
-        questionsList: [
+        lessonList: [
             {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: "Question",
+                ref: "Lesson",
             },
         ],
         comments: [
@@ -22,10 +22,6 @@ const testSchema = new mongoose.Schema(
             type: Date,
             default: Date.now,
         },
-        score: {
-            type: Number,
-            default: 0,
-        }
     },
     { versionKey: false }
 );

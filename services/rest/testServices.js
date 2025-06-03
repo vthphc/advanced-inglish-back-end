@@ -10,12 +10,12 @@ const getTestById = async (testId) => {
     return test;
 };
 
-const postTest = async (topic, title, difficulty, questionsList) => {
+const postTest = async (topic, title, difficulty, lessonList) => {
     const test = new Tests({
         topic: topic,
         title: title,
         difficulty: difficulty,
-        questionsList: questionsList,
+        lessonList: lessonList,
     });
     await test.save();
     return test;
