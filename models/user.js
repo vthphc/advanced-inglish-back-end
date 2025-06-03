@@ -16,6 +16,7 @@ const userSchema = new mongoose.Schema(
             gender: String,
             bio: String,
         },
+
         subscription: {
             status: {
                 type: String,
