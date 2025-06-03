@@ -25,9 +25,9 @@ const retrieveTestById = async (req, res) => {
 };
 
 const addNewTest = async (req, res) => {
-    const { topic, title, difficulty, questionsList } = req.body;
+    const { topic, title, difficulty, lessonList } = req.body;
     try {
-        const newTest = await postTest(topic, title, difficulty, questionsList);
+        const newTest = await postTest(topic, title, difficulty, lessonList);
         res.status(201).json(newTest);
     } catch (error) {
         res.status(500).json({ error: error.message });

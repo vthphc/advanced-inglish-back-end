@@ -13,7 +13,7 @@ const questionSchema = new mongoose.Schema(
         explanation: {
             type: String,
             default: "No explanation provided.",
-        },
+        }
     },
     { versionKey: false }
 );

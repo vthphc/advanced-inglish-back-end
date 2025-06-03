@@ -14,6 +14,18 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// set up CORS for all addresses
+app.use(
+    cors({
+        origin: "*",
+        methods: ["GET", "POST", "PUT", "DELETE"],
+        allowedHeaders: ["Content-Type", "Authorization"],
+        exposedHeaders: ["Content-Type", "Authorization"],
+        credentials: true,
+        maxAge: 3600,
+    })
+);
+
 app.use("/api", require("./routes"));
 
 async function startServer() {

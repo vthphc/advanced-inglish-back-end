@@ -64,6 +64,23 @@ const userSchema = new mongoose.Schema(
                 },
                 score: Number,
                 takenAt: { type: Date, default: Date.now },
+                lessons: [
+                    {
+                        lesson: {
+                            type: mongoose.Schema.Types.ObjectId,
+                            ref: "Lesson",
+                        },
+                        questions: [
+                            {
+                                question: {
+                                    type: mongoose.Schema.Types.ObjectId,
+                                    ref: "Question",
+                                },
+                                selectedAnswer: { type: String, default: null },
+                            },
+                        ],
+                    },
+                ],
             },
         ],
         reports: [
