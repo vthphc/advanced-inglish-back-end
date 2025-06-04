@@ -39,9 +39,17 @@ const getTakenTest = async (req, res) => {
 
     try {
         const user = await getMe(token);
-        const takenTest = user.testsTaken.find(
-            (test) => test.test.toString() === testId
-        );
+        const takenTest = await Users.findById(user._id)
+            .populate({
+                path: "testsTaken.test",
+                match: { _id: testId },
+            })
+            .populate("testsTaken.lessons.questions.question")
+            .then((user) =>
+                user.testsTaken.find(
+                    (test) => test.test && test.test._id.toString() === testId
+                )
+            );
 
         if (!takenTest) {
             return res
@@ -60,9 +68,14 @@ const getAllTakenTests = async (req, res) => {
 
     try {
         const user = await getMe(token);
-        const takenTests = user.testsTaken;
+        const takenTests = await Users.findById(user._id)
+            .populate({
+                path: "testsTaken.test",
+                select: "title topic",
+            })
+            .select("testsTaken");
 
-        res.status(200).json({ takenTests });
+        res.status(200).json({ takenTests: takenTests.testsTaken });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
