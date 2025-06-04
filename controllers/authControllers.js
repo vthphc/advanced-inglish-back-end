@@ -1,5 +1,6 @@
 const { sendTestEmail } = require("../services/auth/mailer");
 const { loginUser, getMe } = require("../services/auth/login");
+const Users = require("../models/user");
 
 const sendEmail = async (req, res) => {
     const { email } = req.body;
@@ -32,10 +33,45 @@ const me = async (req, res) => {
     }
 };
 
+const getTakenTest = async (req, res) => {
+    const { testId } = req.params;
+    const token = req.headers.authorization.split(" ")[1];
 
+    try {
+        const user = await getMe(token);
+        const takenTest = user.testsTaken.find(
+            (test) => test.test.toString() === testId
+        );
+
+        if (!takenTest) {
+            return res
+                .status(404)
+                .json({ error: "Test not found in user's taken tests" });
+        }
+
+        res.status(200).json({ takenTest });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+const getAllTakenTests = async (req, res) => {
+    const token = req.headers.authorization.split(" ")[1];
+
+    try {
+        const user = await getMe(token);
+        const takenTests = user.testsTaken;
+
+        res.status(200).json({ takenTests });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
 
 module.exports = {
     sendEmail,
     login,
     me,
+    getTakenTest,
+    getAllTakenTests,
 };

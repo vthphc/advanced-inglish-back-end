@@ -9,11 +9,13 @@ const authMiddleware = require("../middleware/auth");
 router.post("/send-email", authControllers.sendEmail);
 router.post("/register", registerService.registerUser);
 router.put(
-	"/verify-email/:verificationToken",
-	registerService.updateUserVerification
+    "/verify-email/:verificationToken",
+    registerService.updateUserVerification
 );
 router.post("/login", authControllers.login);
 router.get("/me", authControllers.me);
+router.get("/taken-test/:testId", authMiddleware, authControllers.getTakenTest);
+router.get("/taken-tests", authMiddleware, authControllers.getAllTakenTests);
 router.put("/change-password", authMiddleware, updateService.changePassword);
 router.put("/profile", authMiddleware, updateService.updateProfile);
 
