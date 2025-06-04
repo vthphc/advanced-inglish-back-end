@@ -2,7 +2,7 @@ const Comments = require("../../models/comment");
 
 const postComment = async (userId, content) => {
     const newComment = new Comments({
-        userId: userId,
+        user: userId,
         content: content,
     });
     await newComment.save();
@@ -15,7 +15,7 @@ const getCommentById = async (commentId) => {
 };
 
 const getAllCommentsByUserId = async (userId) => {
-    const comments = await Comments.find({ userId: userId });
+    const comments = await Comments.find({ user: userId });
     return comments;
 };
 

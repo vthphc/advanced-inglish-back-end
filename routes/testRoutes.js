@@ -7,5 +7,7 @@ router.get("/", testControllers.retrieveAllTests);
 router.get("/:testId", testControllers.retrieveTestById);
 router.post("/", testControllers.addNewTest);
 router.delete("/:testId", testControllers.removeTest);
+router.post("/:testId/comments", testControllers.addTestComment);
+router.post("/:testId/submit", testControllers.submitTestController);
 
 module.exports = router;
