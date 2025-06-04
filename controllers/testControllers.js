@@ -3,7 +3,11 @@ const {
     getTestById,
     postTest,
     deleteTest,
+    updateTestComment,
+    submitTest,
 } = require("../services/rest/testServices");
+
+const { postComment } = require("../services/rest/commentServices");
 
 const retrieveAllTests = async (req, res) => {
     try {
@@ -44,9 +48,65 @@ const removeTest = async (req, res) => {
     }
 };
 
+const addTestComment = async (req, res) => {
+    const { testId } = req.params;
+    const { content, userId } = req.body;
+
+    if (!content) {
+        return res.status(400).json({ message: "Content is required" });
+    }
+
+    try {
+        const comment = await postComment(content, userId);
+        const updatedTest = await updateTestComment(testId, comment._id);
+        res.status(200).json(updatedTest);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+const submitTestController = async (req, res) => {
+    try {
+        const { testId } = req.params;
+        const { userId, lessons } = req.body;
+
+        if (!userId) {
+            return res
+                .status(400)
+                .json({ error: "userId is required in request body." });
+        }
+        if (!Array.isArray(lessons) || lessons.length === 0) {
+            return res.status(400).json({
+                error: "lessons array is required and cannot be empty.",
+            });
+        }
+
+        const { score, totalQuestions, correctCount } = await submitTest(
+            userId,
+            testId,
+            lessons
+        );
+
+        return res.status(200).json({
+            message: "Test submitted successfully.",
+            score,
+            totalQuestions,
+            correctCount,
+        });
+    } catch (error) {
+        console.error("Error in submitTestController:", error);
+        if (/not found|invalid/i.test(error.message)) {
+            return res.status(400).json({ error: error.message });
+        }
+        return res.status(500).json({ error: "Server error." });
+    }
+};
+
 module.exports = {
     retrieveAllTests,
     retrieveTestById,
     addNewTest,
     removeTest,
+    addTestComment,
+    submitTestController,
 };

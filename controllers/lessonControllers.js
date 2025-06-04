@@ -3,8 +3,11 @@ const {
     getLessonById,
     postLesson,
     deleteLessonById,
+    updateLessonComment,
     getLessonsByIds,
 } = require("../services/rest/lessonServices");
+
+const { postComment } = require("../services/rest/commentServices");
 
 const retrieveAllLessons = async (req, res) => {
     try {
@@ -50,6 +53,23 @@ const removeLessonById = async (req, res) => {
     }
 };
 
+const addLessonComment = async (req, res) => {
+    const { lessonId } = req.params;
+    const { content, userId } = req.body;
+
+    if (!content) {
+        return res.status(400).json({ message: "Content is required" });
+    }
+
+    try {
+        const { _id: commentId } = await postComment(userId, content);
+        const lesson = await updateLessonComment(lessonId, commentId);
+        res.status(200).json(lesson);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 const retrieveLessonsByIds = async (req, res) => {
     try {
         const { ids } = req.query;
@@ -71,5 +91,5 @@ module.exports = {
     retrieveLessonById,
     addLesson,
     removeLessonById,
-    retrieveLessonsByIds,
+    addLessonComment,
 };

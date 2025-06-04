@@ -35,10 +35,21 @@ const deleteLessonById = async (id) => {
     return lesson;
 };
 
+const updateLessonComment = async (id, commentId) => {
+    const lesson = await Lessons.findById(id);
+    if (!lesson) {
+        throw new Error("Lesson not found");
+    }
+    lesson.comments.push(commentId);
+    await lesson.save();
+    return lesson;
+};
+
 module.exports = {
     getAllLessons,
     getLessonsByIds,
     getLessonById,
     postLesson,
     deleteLessonById,
+    updateLessonComment,
 };
