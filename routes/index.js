@@ -14,6 +14,7 @@ const lessonRoutes = require("./lessonRoutes");
 const authRoutes = require("./authRoutes");
 const completionRoutes = require("./completionRoutes");
 const paymentRoutes = require("./paymentRoutes");
+const transcriptionRoutes = require("./transcriptionRoutes");
 
 router.use("/init", initRoutes);
 router.use("/questions", questionRoutes);
@@ -28,5 +29,6 @@ router.use("/lessons", lessonRoutes);
 router.use("/auth", authRoutes);
 router.use("/completion", completionRoutes);
 router.use("/payments", paymentRoutes);
+router.use("/transcriptions", transcriptionRoutes);
 
 module.exports = router;
