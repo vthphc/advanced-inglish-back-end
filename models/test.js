@@ -4,6 +4,7 @@ const testSchema = new mongoose.Schema(
     {
         topic: String,
         title: String,
+        type: String,
         difficulty: String,
         lessonList: [
             {
