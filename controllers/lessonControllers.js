@@ -11,6 +11,12 @@ const { postComment } = require("../services/rest/commentServices");
 
 const retrieveAllLessons = async (req, res) => {
     try {
+        const { ids } = req.query;
+        if (ids) {
+            const idArray = ids.split(",");
+            const lessons = await getLessonsByIds(idArray);
+            return res.status(200).json(lessons);
+        }
         const lessons = await getAllLessons();
         res.status(200).json(lessons);
     } catch (error) {
@@ -20,7 +26,7 @@ const retrieveAllLessons = async (req, res) => {
 
 const retrieveLessonById = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { lessonId: id } = req.params;
         const lesson = await getLessonById(id);
         res.status(200).json(lesson);
     } catch (error) {
@@ -92,4 +98,5 @@ module.exports = {
     addLesson,
     removeLessonById,
     addLessonComment,
+    retrieveLessonsByIds,
 };

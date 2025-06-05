@@ -44,6 +44,10 @@ const getTakenTest = async (req, res) => {
                 path: "testsTaken.test",
                 match: { _id: testId },
             })
+            .populate({
+                path: "testsTaken.lessons.lesson",
+                select: "title _id",
+            })
             .populate("testsTaken.lessons.questions.question")
             .then((user) =>
                 user.testsTaken.find(

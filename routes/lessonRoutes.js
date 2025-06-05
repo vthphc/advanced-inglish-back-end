@@ -4,7 +4,6 @@ const router = express.Router();
 const lessonControllers = require("../controllers/lessonControllers");
 
 router.get("/", lessonControllers.retrieveAllLessons);
-router.get("/by-ids", lessonControllers.retrieveLessonById);
 router.get("/:lessonId", lessonControllers.retrieveLessonById);
 router.post("/", lessonControllers.addLesson);
 router.delete("/:lessonId", lessonControllers.removeLessonById);

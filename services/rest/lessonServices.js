@@ -15,7 +15,12 @@ const getLessonsByIds = async (ids) => {
 };
 
 const getLessonById = async (id) => {
-    const lesson = await Lessons.findById(id);
+    const lesson = await Lessons.findById(id)
+        .populate("questionsList")
+        .populate("comments");
+    if (!lesson) {
+        throw new Error("Lesson not found");
+    }
     return lesson;
 };
 
