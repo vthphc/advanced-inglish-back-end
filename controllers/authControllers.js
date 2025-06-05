@@ -42,7 +42,6 @@ const getTakenTest = async (req, res) => {
         const takenTest = await Users.findById(user._id)
             .populate({
                 path: "testsTaken.test",
-                match: { _id: testId },
             })
             .populate({
                 path: "testsTaken.lessons.lesson",
@@ -50,9 +49,7 @@ const getTakenTest = async (req, res) => {
             })
             .populate("testsTaken.lessons.questions.question")
             .then((user) =>
-                user.testsTaken.find(
-                    (test) => test.test && test.test._id.toString() === testId
-                )
+                user.testsTaken.find((test) => test._id.toString() === testId)
             );
 
         if (!takenTest) {
