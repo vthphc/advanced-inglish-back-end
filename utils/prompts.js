@@ -24,11 +24,16 @@ const explanationPrompt = (question) =>
                     Provide a brief, single-line explanation for why "${
                         question.correctAnswer
                     }" is the correct answer for this question: "${
-        question.questionName
+        question.question
     }".
                      
-                    Options are: ${question.questionOptions.join(", ")}. 
-                    Explain succinctly why other options are incorrect.`;
+                    Options are: ${question.options}. 
+                    Explain succinctly why other options are incorrect.
+                    
+                    
+                    Your response should be a single line string (don't add any special symbol).
+                    Example response:
+                    "The correct answer is 'Paris' because it is the capital of France, while 'London', 'Berlin', and 'Madrid' are not capitals of France."`;
 
 const flashcardPrompt = (topic) => `
     Generate a flashcard about the topic "${topic}" with the following details:
@@ -48,9 +53,43 @@ const flashcardPrompt = (topic) => `
       "createdBy": "Google Gemini"
     }`;
 
+// prompt for generating and reviewing user answer base on the topic as english speaking practice
+const userSpeechPrompt = (topic, answer) => `
+    You are an English teacher helping a student practice speaking skills.
+    The student has provided the following answer: "${answer}" which is related to the topic "${topic}".
+
+    Generate a review of the student's answer, focusing on:
+    1. Correctness: Is the answer factually correct?
+    2. Clarity: Is the answer clear and easy to understand?
+    3. Grammar: Are there any grammatical errors?
+    4. Vocabulary: Is the vocabulary appropriate for the topic?
+    5. Suggestions: Provide constructive feedback on how the student can improve their answer. (This should be a single paragraph string.)
+    6. Overall Score: Give a score out of 100 based on the overall quality of the answer.
+
+    Format your response as a JSON object with the following fields:
+    {
+        "correctness": "Your assessment of the correctness of the answer",
+        "clarity": "Your assessment of the clarity of the answer",
+        "grammar": "Your assessment of the grammar used in the answer",
+        "vocabulary": "Your assessment of the vocabulary used in the answer",
+        "suggestions": "Constructive feedback for improvement",
+        "overallScore": "Your overall score out of 100"
+    }
+
+    Example response:
+    {
+        "correctness": "The answer is factually correct.",
+        "clarity": "The answer is clear and easy to understand.",
+        "grammar": "There are no grammatical errors.",
+        "vocabulary": "The vocabulary is appropriate for the topic.",
+        "suggestions": "Consider adding more details to enhance the answer.",
+        "overallScore": 90
+    }`;
+
 module.exports = {
     contextPrompt,
     dialoguePrompt,
     explanationPrompt,
     flashcardPrompt,
+    userSpeechPrompt,
 };

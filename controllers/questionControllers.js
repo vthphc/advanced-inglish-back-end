@@ -6,6 +6,10 @@ const {
     deleteQuestion,
 } = require("../services/rest/questionServices");
 
+const { getResponse } = require("../services/completion/completion");
+const { explanationPrompt } = require("../utils/prompts");
+const Questions = require("../models/question");
+
 const retrieveQuestions = async (req, res) => {
     try {
         const questions = await getAllQuestions();
@@ -97,10 +101,39 @@ const removeQuestion = async (req, res) => {
     }
 };
 
+const getExplanation = async (req, res) => {
+    const { question } = req.body;
+    try {
+        const prompt = explanationPrompt(question);
+        const response = await getResponse(prompt);
+
+        const explanation = response.trim();
+        if (!explanation) {
+            return res.status(400).json({ error: "No explanation generated." });
+        }
+
+        // Update the question with the generated explanation
+        const updatedQuestion = await Questions.findByIdAndUpdate(
+            question._id,
+            { explanation },
+            { new: true }
+        );
+
+        if (!updatedQuestion) {
+            return res.status(404).json({ error: "Question not found." });
+        }
+
+        res.status(200).json(updatedQuestion);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 module.exports = {
     retrieveQuestions,
     retrieveQuestion,
     addQuestion,
     editQuestion,
     removeQuestion,
+    getExplanation,
 };

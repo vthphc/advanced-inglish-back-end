@@ -28,3 +28,6 @@ yarn-error.log*
 # OS generated files
 .DS_Store
 Thumbs.db
+
+# Google Cloud Platform API credentials
+gen-lang-client-0472607483-215ec532744a.json

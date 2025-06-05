@@ -8,5 +8,6 @@ router.get("/:questionId", questionControllers.retrieveQuestion);
 router.post("/", questionControllers.addQuestion);
 router.put("/", questionControllers.editQuestion);
 router.delete("/:questionId", questionControllers.removeQuestion);
+router.post("/explain", questionControllers.getExplanation);
 
 module.exports = router;
