@@ -24,11 +24,16 @@ const explanationPrompt = (question) =>
                     Provide a brief, single-line explanation for why "${
                         question.correctAnswer
                     }" is the correct answer for this question: "${
-        question.questionName
+        question.question
     }".
                      
-                    Options are: ${question.questionOptions.join(", ")}. 
-                    Explain succinctly why other options are incorrect.`;
+                    Options are: ${question.options}. 
+                    Explain succinctly why other options are incorrect.
+                    
+                    
+                    Your response should be a single line string (don't add any special symbol).
+                    Example response:
+                    "The correct answer is 'Paris' because it is the capital of France, while 'London', 'Berlin', and 'Madrid' are not capitals of France."`;
 
 const flashcardPrompt = (topic) => `
     Generate a flashcard about the topic "${topic}" with the following details:

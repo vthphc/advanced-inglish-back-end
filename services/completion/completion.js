@@ -8,7 +8,7 @@ const getResponse = async (prompt) => {
     });
 
     const mainResponse = response.candidates[0].content.parts[0].text;
-    
+
     const cleanedResponse = cleanResponse(mainResponse);
     return cleanedResponse;
 };
