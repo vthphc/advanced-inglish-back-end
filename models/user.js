@@ -77,6 +77,15 @@ const userSchema = new mongoose.Schema(
                                     ref: "Question",
                                 },
                                 selectedAnswer: { type: String, default: null },
+                                aiReview:
+                                    {
+                                        content: String,
+                                        structure: String,
+                                        grammar: String,
+                                        vocabulary: String,
+                                        suggestions: String,
+                                        overallScore: Number,
+                                    } || null,
                             },
                         ],
                     },
