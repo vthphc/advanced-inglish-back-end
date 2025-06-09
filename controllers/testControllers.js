@@ -8,6 +8,7 @@ const {
 } = require("../services/rest/testServices");
 
 const { postComment } = require("../services/rest/commentServices");
+const { transformUserIdsToNames } = require("../middleware/commentMiddleware");
 
 const retrieveAllTests = async (req, res) => {
     try {
@@ -57,7 +58,7 @@ const addTestComment = async (req, res) => {
     }
 
     try {
-        const comment = await postComment(content, userId);
+        const comment = await postComment(userId, content);
         const updatedTest = await updateTestComment(testId, comment._id);
         res.status(200).json(updatedTest);
     } catch (error) {
@@ -106,7 +107,9 @@ const getTestComments = async (req, res) => {
     const { testId } = req.params;
     try {
         const test = await getTestById(testId);
-        res.status(200).json(test.comments);
+        await transformUserIdsToNames(req, res, () => {
+            res.status(200).json(test.comments);
+        });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
