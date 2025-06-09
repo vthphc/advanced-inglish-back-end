@@ -3,6 +3,8 @@ const Lessons = require("../../models/lesson");
 const Questions = require("../../models/question");
 const Users = require("../../models/user");
 const mongoose = require("mongoose");
+const { getResponse } = require("../../services/completion/completion");
+const { userWritingPrompt } = require("../../utils/prompts");
 
 const getTests = async () => {
     const tests = await Tests.find();
@@ -153,6 +155,137 @@ const submitTest = async (userId, testId, lessonsPayload) => {
     return { score, totalQuestions, correctCount };
 };
 
+const submitWritingTest = async (userId, testId, lessonsPayload) => {
+    const testDoc = await Tests.findById(testId).lean();
+    if (!testDoc) throw new Error("Test not found");
+
+    // Validate all lessonIds
+    const validLessonIds = testDoc.lessonList.map((id) => id.toString());
+    for (const lessonBlock of lessonsPayload) {
+        if (!validLessonIds.includes(lessonBlock.lessonId.toString())) {
+            throw new Error("Lesson not found in this test");
+        }
+        if (
+            !Array.isArray(lessonBlock.writingAnswers) ||
+            lessonBlock.writingAnswers.length === 0
+        ) {
+            throw new Error(
+                "writingAnswers array is required and cannot be empty for each lesson"
+            );
+        }
+    }
+
+    const lessonsSubdocs = [];
+    const feedbacks = [];
+    let totalScore = 0;
+
+    for (const lessonBlock of lessonsPayload) {
+        const { lessonId, writingAnswers } = lessonBlock;
+        const questionsSubdocs = [];
+
+        for (const wa of writingAnswers) {
+            const { questionId, answer } = wa;
+            const questionDoc = await Questions.findById(questionId).lean();
+            if (!questionDoc)
+                throw new Error(`Question ${questionId} not found`);
+
+            const aiPrompt = userWritingPrompt(
+                questionDoc.question,
+                answer,
+                questionDoc.correctAnswer || ""
+            );
+
+            const aiRaw = await getResponse(aiPrompt);
+            let aiResult;
+            try {
+                aiResult = JSON.parse(aiRaw);
+            } catch (err) {
+                throw new Error("Failed to parse AI response: " + err.message);
+            }
+
+            if (!aiResult || typeof aiResult !== "object") {
+                throw new Error("Invalid AI response format");
+            }
+
+            const {
+                content,
+                structure,
+                grammar,
+                vocabulary,
+                suggestions,
+                overallScore,
+            } = aiResult;
+
+            const numericScore =
+                typeof overallScore === "string"
+                    ? Number(overallScore)
+                    : overallScore;
+
+            if (
+                typeof content !== "string" ||
+                typeof structure !== "string" ||
+                typeof grammar !== "string" ||
+                typeof vocabulary !== "string" ||
+                typeof suggestions !== "string" ||
+                typeof numericScore !== "number" ||
+                isNaN(numericScore)
+            ) {
+                throw new Error("AI response is missing required fields");
+            }
+
+            questionsSubdocs.push({
+                question: new mongoose.Types.ObjectId(questionId),
+                selectedAnswer: answer,
+                aiReview: {
+                    content,
+                    structure,
+                    grammar,
+                    vocabulary,
+                    suggestions,
+                    overallScore: numericScore,
+                },
+            });
+            feedbacks.push({
+                questionId,
+                score: numericScore,
+                feedback: {
+                    content,
+                    structure,
+                    grammar,
+                    vocabulary,
+                    suggestions,
+                },
+            });
+            totalScore += numericScore;
+        }
+
+        lessonsSubdocs.push({
+            lesson: new mongoose.Types.ObjectId(lessonId),
+            questions: questionsSubdocs,
+        });
+    }
+
+    const testTakenEntry = {
+        test: new mongoose.Types.ObjectId(testId),
+        score: totalScore,
+        takenAt: new Date(),
+        lessons: lessonsSubdocs,
+    };
+
+    const userDoc = await Users.findById(userId);
+    if (!userDoc) {
+        throw new Error("User not found");
+    }
+
+    userDoc.testsTaken.push(testTakenEntry);
+    await userDoc.save();
+
+    return {
+        score: totalScore,
+        feedbacks,
+    };
+};
+
 module.exports = {
     getTests,
     getTestById,
@@ -160,4 +293,5 @@ module.exports = {
     deleteTest,
     updateTestComment,
     submitTest,
+    submitWritingTest,
 };

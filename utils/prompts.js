@@ -21,11 +21,7 @@ const dialoguePrompt = (
 const explanationPrompt = (question) =>
     `You are a teacher explaining a question to a student.
 
-                    Provide a brief, single-line explanation for why "${
-                        question.correctAnswer
-                    }" is the correct answer for this question: "${
-        question.question
-    }".
+                    Provide a brief, single-line explanation for why "${question.correctAnswer}" is the correct answer for this question: "${question.question}".
                      
                     Options are: ${question.options}. 
                     Explain succinctly why other options are incorrect.
@@ -86,10 +82,45 @@ const userSpeechPrompt = (topic, answer) => `
         "overallScore": 90
     }`;
 
+// this prompt is used to generate a writing score based on the user's answer to a question
+const userWritingPrompt = (question, answer, suggestionAnswer) => `
+    You are an English teacher evaluating a student's writing response.
+    The student has answered the following question: "${question}" with the answer: "${answer}".
+    Here is a suggested answer for reference: "${suggestionAnswer}".
+
+    Generate a review of the student's writing, focusing on:
+    1. Content: Does the answer address the question effectively, and how does it compare to the suggested answer?
+    2. Structure: Is the answer well-organized with a clear introduction, body, and conclusion?
+    3. Grammar: Are there any grammatical errors?
+    4. Vocabulary: Is the vocabulary appropriate and varied?
+    5. Suggestions: Provide constructive feedback on how the student can improve their writing. (This should be a single paragraph string.)
+    6. Overall Score: Give a score out of 100 based on the overall quality of the writing. (This should be a number, not a string.)
+
+    Format your response as a JSON object with the following fields:
+    {
+        "content": "Your assessment of the content of the answer, including comparison to the suggested answer",
+        "structure": "Your assessment of the structure of the answer",
+        "grammar": "Your assessment of the grammar used in the answer",
+        "vocabulary": "Your assessment of the vocabulary used in the answer",
+        "suggestions": "Constructive feedback for improvement",
+        "overallScore": "Your overall score out of 100"
+    }
+    
+    Example response:
+    {
+        "content": "The answer addresses the question but could include more details as seen in the suggested answer.",
+        "structure": "The answer is organized but lacks a clear conclusion.",
+        "grammar": "There are some grammatical errors that need correction.",
+        "vocabulary": "The vocabulary is appropriate but could be more varied.",
+        "suggestions": "Consider improving the structure by adding more transitional phrases and expanding on key points.",
+        "overallScore": 80
+    }`;
+
 module.exports = {
     contextPrompt,
     dialoguePrompt,
     explanationPrompt,
     flashcardPrompt,
     userSpeechPrompt,
+    userWritingPrompt,
 };

@@ -9,5 +9,9 @@ router.post("/", testControllers.addNewTest);
 router.delete("/:testId", testControllers.removeTest);
 router.post("/:testId/comments", testControllers.addTestComment);
 router.post("/:testId/submit", testControllers.submitTestController);
+router.post(
+    "/:testId/submitWriting",
+    testControllers.submitWritingTestController
+);
 
 module.exports = router;

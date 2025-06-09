@@ -1,10 +1,8 @@
 const cleanResponse = (response) => {
-    // 1. Turn all \" into literal "
-    let cleaned = response.replace(/\\"/g, '"');
-
-    // 3. Finally, remove every remaining " character
-    cleaned = cleaned.replace(/"/g, "");
-
+    // Remove Markdown code block markers (```json, ``` or ```)
+    let cleaned = response.replace(/```json|```/gi, "");
+    // Trim whitespace
+    cleaned = cleaned.trim();
     return cleaned;
 };
 
