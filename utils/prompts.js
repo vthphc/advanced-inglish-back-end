@@ -27,8 +27,8 @@ const explanationPrompt = (question) =>
                     Explain succinctly why other options are incorrect.
                     Here are more contexts:
                     This TOEIC question is of type: ${question.type}
-                    Here is the image that is included in the question: ${question.audioURL}
-                    Here is the audio that is included in the question: ${question.imageURL}
+                    Here is the audio that is included in the question: ${question.audioURL}
+                    Here is the image that is included in the question: ${question.imageURL}
                     If there is no image or audio, just continue with the question.
 
                     Your response should be a single line string (don't add any special symbol).
