@@ -5,6 +5,7 @@ const {
     deleteTest,
     updateTestComment,
     submitTest,
+    submitWritingTest,
 } = require("../services/rest/testServices");
 
 const { postComment } = require("../services/rest/commentServices");
@@ -103,6 +104,43 @@ const submitTestController = async (req, res) => {
     }
 };
 
+const submitWritingTestController = async (req, res) => {
+    try {
+        const { testId } = req.params;
+        const { userId, lessons } = req.body;
+
+        console.log("submitWritingTestController called with:", {
+            testId,
+            userId,
+            lessons,
+        });
+
+        if (!userId) {
+            return res
+                .status(400)
+                .json({ error: "userId is required in request body." });
+        }
+        if (!Array.isArray(lessons) || lessons.length === 0) {
+            return res.status(400).json({
+                error: "lessons array is required and cannot be empty.",
+            });
+        }
+
+        const result = await submitWritingTest(userId, testId, lessons);
+
+        return res.status(200).json({
+            message: "Writing test submitted successfully.",
+            ...result,
+        });
+    } catch (error) {
+        console.error("Error in submitWritingTestController:", error);
+        if (/not found|invalid/i.test(error.message)) {
+            return res.status(400).json({ error: error.message });
+        }
+        return res.status(500).json({ error: "Server error." });
+    }
+};
+
 const getTestComments = async (req, res) => {
     const { testId } = req.params;
     try {
@@ -122,5 +160,6 @@ module.exports = {
     removeTest,
     addTestComment,
     submitTestController,
+    submitWritingTestController,
     getTestComments,
 };
