@@ -181,11 +181,11 @@ const submitWritingTest = async (userId, testId, lessonsPayload) => {
             throw new Error("Lesson not found in this test");
         }
         if (
-            !Array.isArray(lessonBlock.writingAnswers) ||
-            lessonBlock.writingAnswers.length === 0
+            !Array.isArray(lessonBlock.selectedAnswer) ||
+            lessonBlock.selectedAnswer.length === 0
         ) {
             throw new Error(
-                "writingAnswers array is required and cannot be empty for each lesson"
+                "selectedAnswer array is required and cannot be empty for each lesson"
             );
         }
     }
@@ -195,10 +195,10 @@ const submitWritingTest = async (userId, testId, lessonsPayload) => {
     let totalScore = 0;
 
     for (const lessonBlock of lessonsPayload) {
-        const { lessonId, writingAnswers } = lessonBlock;
+        const { lessonId, selectedAnswer } = lessonBlock;
         const questionsSubdocs = [];
 
-        for (const wa of writingAnswers) {
+        for (const wa of selectedAnswer) {
             const { questionId, answer } = wa;
             const questionDoc = await Questions.findById(questionId).lean();
             if (!questionDoc)
