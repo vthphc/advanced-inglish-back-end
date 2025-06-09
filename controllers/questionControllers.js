@@ -102,8 +102,13 @@ const removeQuestion = async (req, res) => {
 };
 
 const getExplanation = async (req, res) => {
-    const { question } = req.body;
+    const { questionId } = req.body;
     try {
+        // find the question by ID
+        const question = await Questions.findById(questionId);
+        if (!question) {
+            return res.status(404).json({ error: "Question not found." });
+        }
         const prompt = explanationPrompt(question);
         const response = await getResponse(prompt);
 
