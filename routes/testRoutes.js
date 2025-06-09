@@ -5,6 +5,7 @@ const testControllers = require("../controllers/testControllers");
 
 router.get("/", testControllers.retrieveAllTests);
 router.get("/:testId", testControllers.retrieveTestById);
+router.get("/:testId/comments", testControllers.getTestComments);
 router.post("/", testControllers.addNewTest);
 router.delete("/:testId", testControllers.removeTest);
 router.post("/:testId/comments", testControllers.addTestComment);

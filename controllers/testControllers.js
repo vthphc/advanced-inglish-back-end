@@ -102,6 +102,16 @@ const submitTestController = async (req, res) => {
     }
 };
 
+const getTestComments = async (req, res) => {
+    const { testId } = req.params;
+    try {
+        const test = await getTestById(testId);
+        res.status(200).json(test.comments);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 module.exports = {
     retrieveAllTests,
     retrieveTestById,
@@ -109,4 +119,5 @@ module.exports = {
     removeTest,
     addTestComment,
     submitTestController,
+    getTestComments,
 };
