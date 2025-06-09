@@ -4,7 +4,6 @@ const reportSchema = new mongoose.Schema(
     {
         content: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "Question",
         },
         description: String,
         user: {
