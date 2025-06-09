@@ -19,18 +19,18 @@ const dialoguePrompt = (
     Person B: [line]`;
 
 const explanationPrompt = (question) =>
-    `You are a teacher explaining a question to a student.
+    `You are a teacher explaining a TOEIC question to a student.
 
-                    Provide a brief, single-line explanation for why "${
-                        question.correctAnswer
-                    }" is the correct answer for this question: "${
-        question.question
-    }".
+                    Provide a brief, single-line explanation for why "${question.correctAnswer}" is the correct answer for this question: "${question.question}".
                      
                     Options are: ${question.options}. 
                     Explain succinctly why other options are incorrect.
-                    
-                    
+                    Here are more contexts:
+                    This TOEIC question is of type: ${question.type}
+                    Here is the image that is included in the question: ${question.audioURL}
+                    Here is the audio that is included in the question: ${question.imageURL}
+                    If there is no image or audio, just continue with the question.
+
                     Your response should be a single line string (don't add any special symbol).
                     Example response:
                     "The correct answer is 'Paris' because it is the capital of France, while 'London', 'Berlin', and 'Madrid' are not capitals of France."`;
